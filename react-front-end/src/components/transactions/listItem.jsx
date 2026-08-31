@@ -59,7 +59,7 @@ export default function ListItem(props) {
 
   // Handles the deletion of a transaction and updates state
   const deletion = function (id, type) {
-    axios.delete("http://localhost:3000/transactions/", { data: { id, type } })
+    axios.delete("/transactions/", { data: { id, type } })
       .then(() => {
         if (type === "income") {
           // creates a new income list with all items except the item being deleted
@@ -81,7 +81,7 @@ export default function ListItem(props) {
 
    // Handles the edit request of an already existing transaction
    const handleEdit = (name, description, amount, month, day, year, id, type) => {
-    axios.patch(`http://localhost:3000/transactions/`, { data: { name, description, amount, budget, month, day, year, id, type } })
+    axios.patch(`/transactions/`, { data: { name, description, amount, budget, month, day, year, id, type } })
       .then(() => {
         if (type === "income") {
           for (let i = 0; i < incomeTransactions.length; i++) {

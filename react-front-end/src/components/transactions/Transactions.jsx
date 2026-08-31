@@ -35,7 +35,7 @@ export default function Transactions() {
   const { month, year, userId } = useContext(dataContext);
   
   useEffect(() => {
-    axios.get("http://localhost:3000/transactions", { params: { year, month, userId } })
+    axios.get("/transactions", { params: { year, month, userId } })
       .then((res) => {
         setState((prev) => ({ ...prev, expenseTransactions: res.data.expenseInfo, incomeTransactions: res.data.incomeInfo, expenseBudget: res.data.expenseBudget, incomeBudget: res.data.incomeBudget }));
       });

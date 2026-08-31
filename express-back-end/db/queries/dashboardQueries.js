@@ -25,9 +25,8 @@ const getBalanceBudgetByUserIdYear = (id, year) => {
     .then((response) => {
       //if no balance budget has been set for some months, create a new balance budget entry with amount 0
       for (let i = 1; i <= 12; i++) {
-        if (!response.rows.find(e=>e.month === i)) {
-          createBalanceBudget(0,year,i,id);
-          response.rows.push({month:i,amount:0});
+  if (!response.rows.find(e => Number(e.month) === i)) {
+    response.rows.push({ month: i, amount: 0 });
         }
       }
       return response.rows;

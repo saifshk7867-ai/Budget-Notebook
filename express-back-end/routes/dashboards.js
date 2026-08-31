@@ -5,11 +5,18 @@ const dashBoardQueries = require('../db/queries/dashboardQueries');
 router.get('/', (req, res) => {
   const dashboardData = {};
   const userId = req.query.userId;
-  
+  const year = Number(req.query.year);
+
+if (!userId || !year) {
+  return res.status(400).json({
+    error: 'userId and year are required'
+  });
+}  
   Promise.all([
-    dashBoardQueries.getBalanceBudgetByUserIdYear(userId, req.query.year),
-    dashBoardQueries.getMonthlyIncomeByUserIdYear(userId, req.query.year),
-    dashBoardQueries.getMonthlyExpenseByUserIdYear(userId, req.query.year)
+  dashBoardQueries.getBalanceBudgetByUserIdYear(userId, year),
+  dashBoardQueries.getMonthlyIncomeByUserIdYear(userId, year),
+  dashBoardQueries.getMonthlyExpenseByUserIdYear(userId, year)
+
   ])
     .then((all) => {
       dashboardData.balanceBudget = all[0];

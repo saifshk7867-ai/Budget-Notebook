@@ -21,7 +21,7 @@ export default function EditForm(props) {
   };
 
   const handleSave = function () {
-    axios.patch('http://localhost:3000/budgets', { data: { formValue, type: props.type, id: props.id, month, year, userId: 1 } })
+    axios.patch('/budgets', { data: { formValue, type: props.type, id: props.id, month, year, userId: 1 } })
       .then((resolve) => {
 
         if (props.type === 'income') {

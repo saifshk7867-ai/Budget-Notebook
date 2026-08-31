@@ -48,7 +48,7 @@ export default function User() {
   };
 
   const handleSubmit = () => {
-    axios.post('http://localhost:3000/', { data: formValue })
+    axios.post('/users', { data: formValue })
       .then((res) => {
         if (res.data) {
           setUserId(res.data.id);

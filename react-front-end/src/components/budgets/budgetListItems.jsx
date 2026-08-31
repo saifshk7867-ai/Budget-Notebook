@@ -27,7 +27,7 @@ export default function BudgetListItems(props) {
     if (haveTableRowansactions !== "0" && haveTableRowansactions) {
       setAlert(id)
     } else {
-      axios.delete('http://localhost:3000/budgets', { data: { id, budgetType } });
+      axios.delete('/budgets', { data: { id, budgetType } });
       if (budgetType === "income") {
         const newIncomeAndBudget = incomeAndBudget.filter(e => e.id !== id);
         setState((prev) => ({

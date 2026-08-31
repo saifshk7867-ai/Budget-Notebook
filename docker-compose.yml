@@ -1,0 +1,57 @@
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: budget-notebook-postgres
+    environment:
+      POSTGRES_DB: budget_notebook
+      POSTGRES_USER: budget_user
+      POSTGRES_PASSWORD: budget_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
+      - ./docker/postgres/schema:/docker-entrypoint-initdb.d/schema:ro
+      - ./docker/postgres/seeds:/docker-entrypoint-initdb.d/seeds:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U budget_user -d budget_notebook"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./express-back-end
+      dockerfile: Dockerfile
+    container_name: budget-notebook-backend
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: budget_user
+      DB_PASS: budget_password
+      DB_NAME: budget_notebook
+      DB_SSL: "false"
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./react-front-end
+      dockerfile: Dockerfile
+    container_name: budget-notebook-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+
+
+
+
+

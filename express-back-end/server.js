@@ -20,7 +20,7 @@ const user = require('./routes/users');
 App.use('/transactions', transactions);
 App.use('/dashboards', dashboard);
 App.use('/budgets', budget);
-App.use('/', user);
+App.use('/users', user);
 
 App.listen(PORT, () => {
   // eslint-disable-next-line no-console

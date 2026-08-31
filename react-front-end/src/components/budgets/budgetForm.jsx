@@ -36,7 +36,7 @@ export default function budgetForm(props) {
     formValue.year = Number(formValue.date.slice(0, 4));
     formValue.month = Number(formValue.date.slice(-2));
 
-    axios.post('http://localhost:3000/budgets', { data: { formValue, tabType } })
+    axios.post('/budgets', { data: { formValue, tabType } })
 
       .then((resolve) => {
         if (tabType === 0&&formValue.month===month&&formValue.year===year) {

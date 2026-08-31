@@ -72,7 +72,7 @@ export default function NewTransactionForm(props) {
     formValue.year = Number(formValue.date.slice(0, 4));
     formValue.month = Number(formValue.date.slice(5, 7));
     formValue.day = Number(formValue.date.slice(-2));
-    axios.post(`http://localhost:3000/transactions/`, { data: { type, formValue } })
+    axios.post(`/transactions/`, { data: { type, formValue } })
       .then((res) => {
         if (type === "income") {
           const newIncomeTransactions = [...incomeTransactions,
