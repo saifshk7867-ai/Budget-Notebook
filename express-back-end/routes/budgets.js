@@ -6,11 +6,31 @@ const budgetQueries = require('../db/queries/budgetQueries');
 router.get('/', (req, res) => {
   const budgetData = {};
   const userId = req.query.userId;
+	  const monthParam = req.query.month;
+  const yearParam = req.query.year;
+  const month = Number(monthParam);
+  const year = Number(yearParam);
 
-  Promise.all([
-    budgetQueries.getIncomeAndBudget(userId,req.query.month,req.query.year),
-    budgetQueries.getExpenseAndBudget(userId,req.query.month,req.query.year),
-    budgetQueries.getBalanceBudget(userId,req.query.month,req.query.year)
+  if (
+    !userId ||
+    monthParam === undefined ||
+    yearParam === undefined ||
+    !Number.isInteger(month) ||
+    month < 1 ||
+    month > 12 ||
+    !Number.isInteger(year) ||
+    year < 1900 ||
+    year > 9999
+  ) {
+    return res.status(400).json({
+      error: 'userId, a valid month, and a valid year are required'
+    });
+  }
+
+   Promise.all([
+    budgetQueries.getIncomeAndBudget(userId, month, year),
+    budgetQueries.getExpenseAndBudget(userId, month, year),
+    budgetQueries.getBalanceBudget(userId, month, year)
   ])
     .then((all) => {
       //if the selected month has no budget, assign sum and amount as 0, to avoid incomeAndBudget is undefined

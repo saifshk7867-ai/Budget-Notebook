@@ -45,31 +45,29 @@ const createBalanceBudget = (amount, year, month, id) => {
 
 // return an array of balance budget amount, sum of income and sum of expense for a given month
 const getBalanceBudget = (id, month, year) => {
-  const queryStatement = `SELECT amount FROM balance_budgets
-  WHERE month=$2 AND user_id=$1 AND year=$3
-  UNION ALL
-  SELECT SUM(amount) AS income_balance
-  FROM income
-  WHERE month=$2 AND user_id=$1 AND year=$3
-  UNION ALL
-  SELECT SUM(amount) AS expense_balance
-  FROM expense
-  WHERE month=$2 AND user_id=$1 AND year=$3
- `;
+  const queryStatement = `
+    SELECT amount FROM balance_budgets
+    WHERE month=$2 AND user_id=$1 AND year=$3
+    UNION ALL
+    SELECT SUM(amount) AS income_balance
+    FROM income
+    WHERE month=$2 AND user_id=$1 AND year=$3
+    UNION ALL
+    SELECT SUM(amount) AS expense_balance
+    FROM expense
+    WHERE month=$2 AND user_id=$1 AND year=$3
+  `;
+
   return db.query(queryStatement, [id, month, year])
-    .then((response) => {
-      //if no balance budget has been set for the selected month, create a new balance budget entry with amount 0
+    .then(async (response) => {
       if (response.rows.length === 2) {
-        createBalanceBudget(0,year,month,id);
-        response.rows.unshift({amount:0});
-        return response.rows;
+        await createBalanceBudget(0, year, month, id);
+        response.rows.unshift({ amount: 0 });
       }
+
       return response.rows;
-    })
-    .catch(err => console.log(err));
+    });
 };
-
-
 
 const createIncomeBudget = (name, amount, year, month, id) => {
   const queryStatement = `
